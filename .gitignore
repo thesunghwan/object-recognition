@@ -1,0 +1,6 @@
+vlfeat
+results_webpage
+test_image_feats.mat
+train_image_feats.mat
+vocab.mat
+.DS_Store
