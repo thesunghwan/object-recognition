@@ -86,7 +86,7 @@ for i = 1:size(image_paths, 1)
     
     rows = [rows; row];
     %disp(max(rows));
-    image_feats = rows ./ max(max(rows));
+    image_feats = (rows ./ max(max(rows))) .* 100;
     %disp(image_feats);
     %disp(size(SIFT_features));
 end

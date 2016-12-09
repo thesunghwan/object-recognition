@@ -16,7 +16,7 @@ function predicted_categories = nearest_neighbor_classify(train_image_feats, tra
 % predicted_categories is an M x 1 cell array, where each entry is a string
 %  indicating the predicted category for each test image.
 D = vl_alldist2(transpose(test_image_feats),transpose(train_image_feats));
-disp(size(D));
+
 predicted_categories = [];
 for i = 1:size(D, 1)
     [M, I] = min(D(i,:));

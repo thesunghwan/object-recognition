@@ -48,5 +48,37 @@ Useful functions:
 categories = unique(train_labels); 
 num_categories = length(categories);
 
-disp(categories(1:100));
+LAMBDA = 0.0001;
+section_start = 1;
+section_end = 100;
+Ws = [];
+Bs = [];
+
+for i = 1:num_categories
+    interval = 100;
+    
+    labels = -transpose(ones(1, 1500));
+    labels(section_start:section_end) = 1;
+    
+    [W, B] = vl_svmtrain(transpose(train_image_feats), labels, LAMBDA);
+    %disp(size(transpose(train_image_feats)));
+    Ws = [Ws; transpose(W)];
+    Bs = [Bs; B];
+    %disp(size(transpose(W)));
+    %disp(size(B));
+    
+    section_start = section_start + 100;
+    section_end = section_end + 100;
+end
+
+predicted_categories = [];
+for i = 1:1500
+    test_result = Ws * test_image_feats(i, :)';% + Bs;
+    
+    [max_value, max_index] = max(test_result);
+    classification = train_labels(max_index*100);
+    predicted_categories = [predicted_categories; classification];
+end
+
+
 

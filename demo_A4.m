@@ -19,8 +19,8 @@ FEATURE = 'bag of sift';
 % FEATURE = 'spatial pyramid';
 % FEATURE = 'placeholder';
 
-CLASSIFIER = 'nearest neighbor';
-% CLASSIFIER = 'support vector machine';
+%CLASSIFIER = 'nearest neighbor';
+CLASSIFIER = 'support vector machine';
 % CLASSIFIER = 'placeholder';
 
 % set up paths to VLFeat functions. 
@@ -80,9 +80,13 @@ switch lower(FEATURE)
         if ~exist('train_image_feats.mat', 'file')
             train_image_feats = get_bags_of_sifts(train_image_paths);
             test_image_feats  = get_bags_of_sifts(test_image_paths);
+            save('train_image_feats.mat', 'train_image_feats');
+            save('test_image_feats.mat', 'test_image_feats');
+        else
+            load('test_image_feats.mat');
+            load('train_image_feats.mat');
         end
-        save('train_image_feats.mat', 'train_image_feats');
-        save('test_image_feats.mat', 'test_image_feats');
+        
     
     case 'spatial pyramid'
         % YOU CODE build_vocabulary.m
