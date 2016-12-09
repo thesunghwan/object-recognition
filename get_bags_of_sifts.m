@@ -70,7 +70,7 @@ for i = 1:size(image_paths, 1)
     image = imread(image_path{1});
     image = single(image);
     
-    [locations, SIFT_features] = vl_dsift(image, 'fast', 'step', 8);
+    [locations, SIFT_features] = vl_dsift(image, 'fast', 'step', 5);
     
     D = vl_alldist2(single(SIFT_features), transpose(single(vocab)));
     row = zeros(1, vocab_size);

@@ -30,7 +30,7 @@ for i = 1:size(image_paths, 1)
     h0 = make_histogram(image, vocab, vocab_size);
     histogram = [histogram h0];
     
-    pyramid_size = 2;
+    pyramid_size = 8;
     horizontal_loop = [];
     vertical_loop = [];
     

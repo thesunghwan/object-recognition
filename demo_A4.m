@@ -16,7 +16,7 @@
 %results are presented.
 
 %FEATURE = 'bag of sift';
- FEATURE = 'spatial pyramid';
+FEATURE = 'spatial pyramid';
 % FEATURE = 'placeholder';
 
 %CLASSIFIER = 'nearest neighbor';
@@ -98,8 +98,17 @@ switch lower(FEATURE)
         end
         
         % YOU CODE get_spatial_pyramid.m
-        train_image_feats = get_spatial_pyramid(train_image_paths);
-        test_image_feats  = get_spatial_pyramid(test_image_paths);
+        %train_image_feats = get_spatial_pyramid(train_image_paths);
+        %test_image_feats  = get_spatial_pyramid(test_image_paths);
+        if ~exist('train_image_feats.mat', 'file')
+            train_image_feats = get_spatial_pyramid(train_image_paths);
+            test_image_feats  = get_spatial_pyramid(test_image_paths);
+            save('train_image_feats.mat', 'train_image_feats');
+            save('test_image_feats.mat', 'test_image_feats');
+        else
+            load('test_image_feats.mat');
+            load('train_image_feats.mat');
+        end
         
     case 'placeholder'
         train_image_feats = [];
