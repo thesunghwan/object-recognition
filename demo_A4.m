@@ -15,8 +15,8 @@
 %code does not crash when run unmodified and you can get a preview of how
 %results are presented.
 
-FEATURE = 'bag of sift';
-% FEATURE = 'spatial pyramid';
+%FEATURE = 'bag of sift';
+ FEATURE = 'spatial pyramid';
 % FEATURE = 'placeholder';
 
 %CLASSIFIER = 'nearest neighbor';

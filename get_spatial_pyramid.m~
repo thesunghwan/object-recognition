@@ -1,0 +1,92 @@
+function image_feats = get_spatial_pyramid(image_paths)
+% image_paths is an N x 1 cell array of strings where each string is an
+% image path on the file system.
+
+% This function assumes that 'vocab.mat' exists and contains an N x 128
+% matrix 'vocab' where each row is a kmeans centroid or visual word. This
+% matrix is saved to disk rather than passed in a parameter to avoid
+% recomputing the vocabulary every run.
+
+% image_feats is an N x d matrix, where d is the dimensionality of the
+% feature representation. In this case, d will depend on the structure of
+% the spatial pyramid you construct. 
+
+%load('vocab.mat')
+%vocab_size = size(vocab, 2);
+
+load('vocab.mat')
+vocab_size = size(vocab, 1);
+%vocab_size = size(vocab, 2);
+
+histograms = [];
+
+for i = 1:size(image_paths, 1)
+    image_path = image_paths(i);
+    image = imread(image_path{1});
+    image = single(image);
+    
+    
+    
+    
+    h0 = make_histogram(image, vocab, vocab_size);
+    
+    loop_component = [];
+    pyramid_size = 4;
+    horizontal_division_unit = int16(size(image,1)/pyramid_size);
+    vertical_division_unit = int16(size(image,2)/pyramid_size);
+    for j = 1:pyramid_size-1
+        
+        
+        horizontal_loop = [loop_component size(image,1)];
+        vertical_loop = [loop_component size(image,2)];
+    end
+    
+    hor_start = 1;
+    hor_mid = int16(size(image,1)/2);
+    hor_end = size(image,1);
+    ver_start = 1;
+    ver_mid = int16(size(image,2)/2);
+    ver_end = size(image,2);
+    
+    h1 = make_histogram(imresize(image(hor_start:hor_mid, ver_start:ver_mid), 2), vocab, vocab_size);
+    h2 = make_histogram(imresize(image(hor_start:hor_mid, ver_mid:ver_end), 2), vocab, vocab_size);
+    h3 = make_histogram(imresize(image(hor_mid:hor_end, ver_start:ver_mid), 2), vocab, vocab_size);
+    h4 = make_histogram(imresize(image(hor_mid:hor_end, ver_mid:ver_end), 2), vocab, vocab_size);
+    
+    histogram = [h0 h1 h2 h3 h4];
+    
+    hor_start = 1;
+    hor_1 = int16(size(image,1)/4);
+    hor_2 = int16(size(image,1)/4) * 2;
+    hor_3 = int16(size(image,1)/4) * 3;
+    hor_end = size(image,1);
+    
+    ver_start = 1;
+    ver_1 = int16(size(image,2)/4);
+    ver_2 = int16(size(image,2)/4) * 2;
+    ver_3 = int16(size(image,2)/4) * 3;
+    ver_end = size(image,2);
+    
+    h1 = make_histogram(imresize(image(hor_start:hor_1, ver_start:ver_1), 4), vocab, vocab_size);
+    h2 = make_histogram(imresize(image(hor_start:hor_1, ver_1:ver_2), 4), vocab, vocab_size);
+    h3 = make_histogram(imresize(image(hor_start:hor_1, ver_2:ver_3), 4), vocab, vocab_size);
+    h4 = make_histogram(imresize(image(hor_start:hor_1, ver_3:ver_end), 4), vocab, vocab_size);
+    h5 = make_histogram(imresize(image(hor_1:hor_2, ver_start:ver_1), 4), vocab, vocab_size);
+    h6 = make_histogram(imresize(image(hor_1:hor_2, ver_1:ver_2), 4), vocab, vocab_size);
+    h7 = make_histogram(imresize(image(hor_1:hor_2, ver_2:ver_3), 4), vocab, vocab_size);
+    h8 = make_histogram(imresize(image(hor_1:hor_2, ver_3:ver_end), 4), vocab, vocab_size);
+    h9 = make_histogram(imresize(image(hor_2:hor_3, ver_start:ver_1), 4), vocab, vocab_size);
+    h10 = make_histogram(imresize(image(hor_2:hor_3, ver_1:ver_2), 4), vocab, vocab_size);
+    h11 = make_histogram(imresize(image(hor_2:hor_3, ver_2:ver_3), 4), vocab, vocab_size);
+    h12 = make_histogram(imresize(image(hor_2:hor_3, ver_3:ver_end), 4), vocab, vocab_size);
+    h13 = make_histogram(imresize(image(hor_3:hor_end, ver_start:ver_1), 4), vocab, vocab_size);
+    h14 = make_histogram(imresize(image(hor_3:hor_end, ver_1:ver_2), 4), vocab, vocab_size);
+    h15 = make_histogram(imresize(image(hor_3:hor_end, ver_2:ver_3), 4), vocab, vocab_size);
+    h16 = make_histogram(imresize(image(hor_3:hor_end, ver_3:ver_end), 4), vocab, vocab_size);
+    
+    histogram = [histogram h1 h2 h3 h4 h5 h6 h7 h8 h9 h10 h11 h12 h13 h14 h15 h16];
+    
+    histograms = [histograms; histogram];
+    image_feats = (histograms ./ max(max(histograms))) .* 100;
+end
+

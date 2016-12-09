@@ -72,23 +72,16 @@ for i = 1:size(image_paths, 1)
     
     [locations, SIFT_features] = vl_dsift(image, 'fast', 'step', 8);
     
-    %disp(size(SIFT_features));
-    
     D = vl_alldist2(single(SIFT_features), transpose(single(vocab)));
     row = zeros(1, vocab_size);
-    %disp(size(D, 1));
-    %disp(size(D, 2));
+    
     for j = 1:size(D, 1)
         [M, I] = min(D(j,:));
         row(I) = row(I) + 1;
     end
-    %disp(row);
     
     rows = [rows; row];
-    %disp(max(rows));
     image_feats = (rows ./ max(max(rows))) .* 100;
-    %disp(image_feats);
-    %disp(size(SIFT_features));
 end
 
 
